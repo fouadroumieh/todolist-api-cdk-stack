@@ -38,8 +38,13 @@ exports.main = async (event, context, callback) => {
       event.pathParameters.id == undefined
     )
       callback(null, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
         statusCode: 500,
-        body: "Id is empty.",
+        body: JSON.stringify({
+          message: "Id is empty.",
+        }),
       });
     const id = event.pathParameters.id;
     const data = await getItem(id);
@@ -47,18 +52,31 @@ exports.main = async (event, context, callback) => {
       await deleteItem(id);
 
       return {
-        body: `Todo item ${id} delete successfully.`,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          message: `Todo item ${id} delete successfully.`,
+        }),
       };
     }
     callback(null, {
       statusCode: 404,
-      body: "Todo Item not found.",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        message: "Todo Item not found.",
+      }),
     });
   } catch (err) {
     callback(null, {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
       body: JSON.stringify({
-        message: err.message,
+        message: err,
       }),
     });
   }

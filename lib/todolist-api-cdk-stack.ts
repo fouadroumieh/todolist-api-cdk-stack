@@ -120,6 +120,7 @@ export class TodolistApiCdkStack extends Stack {
       },
       defaultCorsPreflightOptions: {
         allowHeaders: [
+          "integration.response.header.Access-Control-Allow-Origin",
           "Content-Type",
           "X-Amz-Date",
           "Authorization",
@@ -134,7 +135,10 @@ export class TodolistApiCdkStack extends Stack {
     //RestApi Resources V1
     const apiV1 = todoApi.root.addResource("v1");
     const todosV1 = apiV1.addResource("todo");
-    todosV1.addMethod("POST", new apigateway.LambdaIntegration(upsertItemFn));
+    todosV1.addMethod(
+      "POST",
+      new apigateway.LambdaIntegration(upsertItemFn, {})
+    );
     todosV1.addMethod("GET", new apigateway.LambdaIntegration(getItemsFn));
     const itemV1 = todosV1.addResource("{id}");
     itemV1.addMethod("GET", new apigateway.LambdaIntegration(getItemFnV1Alias));

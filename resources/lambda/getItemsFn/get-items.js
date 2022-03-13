@@ -18,11 +18,17 @@ exports.main = async (event, context, callback) => {
     const data = await getItems();
 
     return {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
       body: JSON.stringify(data),
     };
   } catch (err) {
     callback(null, {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
       body: JSON.stringify({
         message: err,
       }),

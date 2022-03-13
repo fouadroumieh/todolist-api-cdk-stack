@@ -43,21 +43,34 @@ exports.main = async (event, context, callback) => {
       const data = await getItem(id);
       if (data == null || data.Item == null) {
         callback(null, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
           statusCode: 404,
-          body: "Todo Item not found.",
+          body: JSON.stringify({
+            message: "Todo Item not found.",
+          }),
         });
       }
     }
 
     await upsertItem(id, request.title, request.description);
     return {
-      body: "Todo Item created/updated successfully!",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        message: "Todo Item created/updated successfully!",
+      }),
     };
   } catch (err) {
     callback(null, {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
       body: JSON.stringify({
-        message: err.message,
+        message: err,
       }),
     });
   }
